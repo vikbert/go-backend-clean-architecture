@@ -12,16 +12,16 @@ import (
 func Setup(env *bootstrap.Env, timeout time.Duration, db mongo.Database, gin *gin.Engine) {
 
 	// All Public APIs without bearer token
-	publicRouter := gin.Group("")
-	NewSignupRouter(env, timeout, db, publicRouter)
-	NewLoginRouter(env, timeout, db, publicRouter)
-	NewRefreshTokenRouter(env, timeout, db, publicRouter)
+	publicRouter := gin.Group("api/public")
+	RouterSignup(env, timeout, db, publicRouter)
+	RouterLogin(env, timeout, db, publicRouter)
+	RouterRefreshToken(env, timeout, db, publicRouter)
 
 	// Middleware to verify AccessToken
 	protectedRouter := gin.Group("")
 	protectedRouter.Use(middleware.JwtAuthMiddleware(env.AccessTokenSecret))
 
 	// All Private APIs
-	NewProfileRouter(env, timeout, db, protectedRouter)
-	NewTaskRouter(env, timeout, db, protectedRouter)
+	RouterProfile(env, timeout, db, protectedRouter)
+	RouterTask(env, timeout, db, protectedRouter)
 }

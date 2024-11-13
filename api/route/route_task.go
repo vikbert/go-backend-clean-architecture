@@ -12,10 +12,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewProfileRouter(env *bootstrap.Env, timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
-	ur := repository.NewUserRepository(db, domain.CollectionUser)
-	pc := &controller.ProfileController{
-		ProfileUsecase: usecase.NewProfileUsecase(ur, timeout),
+func RouterTask(env *bootstrap.Env, timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
+	tr := repository.NewTaskRepository(db, domain.CollectionTask)
+	tc := &controller.TaskController{
+		TaskUsecase: usecase.NewTaskUsecase(tr, timeout),
 	}
-	group.GET("/profile", pc.Fetch)
+	group.GET("/task", tc.Fetch)
+	group.POST("/task", tc.Create)
 }

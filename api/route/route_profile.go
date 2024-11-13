@@ -12,11 +12,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRefreshTokenRouter(env *bootstrap.Env, timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
+func RouterProfile(env *bootstrap.Env, timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
 	ur := repository.NewUserRepository(db, domain.CollectionUser)
-	rtc := &controller.RefreshTokenController{
-		RefreshTokenUsecase: usecase.NewRefreshTokenUsecase(ur, timeout),
-		Env:                 env,
+	pc := &controller.ProfileController{
+		ProfileUsecase: usecase.NewProfileUsecase(ur, timeout),
 	}
-	group.POST("/refresh", rtc.RefreshToken)
+	group.GET("/profile", pc.Fetch)
 }

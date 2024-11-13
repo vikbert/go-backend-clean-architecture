@@ -4,7 +4,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . /
+COPY . /app
 
 RUN go install github.com/codegangsta/gin@latest
 EXPOSE 8080

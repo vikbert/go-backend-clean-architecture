@@ -12,11 +12,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewTaskRouter(env *bootstrap.Env, timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
-	tr := repository.NewTaskRepository(db, domain.CollectionTask)
-	tc := &controller.TaskController{
-		TaskUsecase: usecase.NewTaskUsecase(tr, timeout),
+func RouterRefreshToken(env *bootstrap.Env, timeout time.Duration, db mongo.Database, group *gin.RouterGroup) {
+	ur := repository.NewUserRepository(db, domain.CollectionUser)
+	rtc := &controller.RefreshTokenController{
+		RefreshTokenUsecase: usecase.NewRefreshTokenUsecase(ur, timeout),
+		Env:                 env,
 	}
-	group.GET("/task", tc.Fetch)
-	group.POST("/task", tc.Create)
+	group.POST("/refresh", rtc.RefreshToken)
 }
